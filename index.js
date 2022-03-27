@@ -1,6 +1,6 @@
 'use strict'; const IOHook=require('bindings')('iohook');
 
-const kCodes = {65288:"backspace", 65289:"tab", 65293:"enter", 65505:"leftShift", 65506:"rightShift", 65507:"leftCtrl", 65508:"rightCtrl", 65513:"leftAlt", 65514:"rightAlt", 65515:"leftMeta", 65516:"rightMeta", 65300:"mediaPlay", 65301:"mediaStop", 65302:"mediaBack", 65303:"mediaNext", 65307:"esc", 65282:"brightUp", 65283:"brightDown", 65361:"left", 65362:"up", 65363:"right", 65364:"down", 65365:"pageUp", 65366:"pageDown", 65379:"insert", 65335:"delete", 65360:"home", 65367:"end", 65377:"printScr", 65407:"numLock", 65470:"f1", 65471:"f2", 65472:"f3", 65473:"f4", 65474:"f5", 65475:"f6", 65476:"f7", 65477:"f8", 65478:"f9", 65479:"f10", 65480:"f11", 65481:"f12"};
+const kCodes = {65288:"backspace", 65289:"tab", 65293:"enter", 65505:"leftShift", 65506:"rightShift", 65507:"leftCtrl", 65508:"rightCtrl", 65509:"capsLock", 65513:"leftAlt", 65514:"rightAlt", 65515:"leftMeta", 65516:"rightMeta", 65300:"mediaPlay", 65301:"mediaStop", 65302:"mediaBack", 65303:"mediaNext", 65307:"esc", 65282:"brightUp", 65283:"brightDown", 65299:"pauseBreak", 65361:"left", 65362:"up", 65363:"right", 65364:"down", 65365:"pageUp", 65366:"pageDown", 65379:"insert", 65535:"delete", 65360:"home", 65367:"end", 65377:"printScr", 65407:"numLock", 65470:"f1", 65471:"f2", 65472:"f3", 65473:"f4", 65474:"f5", 65475:"f6", 65476:"f7", 65477:"f8", 65478:"f9", 65479:"f10", 65480:"f11", 65481:"f12"};
 //Todo Test: Media buttons, numLock
 //Todo: Number Pad, ??:"scrollLock", ??:"menu"
 
@@ -22,10 +22,10 @@ class IOCallback {
 			if(d.kb) {
 				e.code=d.kb.rawcode;
 				e.key=e.code<200?String.fromCharCode(e.code).toLowerCase():kCodes[e.code];
-				e.leftShift=!!(m&1), e.rightShift=!!(m&16), e.shift=(m&1)||(m&16);
-				e.leftCtrl=!!(m&2), e.rightCtrl=!!(m&32), e.ctrl=(m&2)||(m&32);
-				e.leftMeta=!!(m&4), e.rightMeta=!!(m&64), e.meta=(m&4)||(m&64);
-				e.leftAlt=!!(m&8), e.rightAlt=!!(m&128), e.alt=(m&8)||(m&128);
+				e.leftShift=!!(m&1), e.rightShift=!!(m&16), e.shift=((m&1)||(m&16));
+				e.leftCtrl=!!(m&2), e.rightCtrl=!!(m&32), e.ctrl=!!((m&2)||(m&32));
+				e.leftMeta=!!(m&4), e.rightMeta=!!(m&64), e.meta=!!((m&4)||(m&64));
+				e.leftAlt=!!(m&8), e.rightAlt=!!(m&128), e.alt=!!((m&8)||(m&128));
 				e.capsLock=!!(m&16384);
 			}
 			e.event=n; if(this._cb[n]) this._cb[n](e);

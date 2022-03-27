@@ -1,7 +1,7 @@
 {
   "name": "iohook2",
-  "version": "1.0",
-  "description": "Bindings for libuiohook",
+  "version": "1.0.4",
+  "description": "Nodejs bindings for libuiohook",
   "main": "index.js",
   "scripts": {
     "test": "node test.js",
@@ -24,5 +24,8 @@
   "dependencies": {
     "bindings": "^1.2.1",
     "nan": "^2.4.0"
-  }
+  },
+  "gypfile": true,
+  "bugs": {"url": "https://github.com/Pecacheu/node-iohook/issues"},
+  "homepage": "https://github.com/Pecacheu/node-iohook#readme"
 }
