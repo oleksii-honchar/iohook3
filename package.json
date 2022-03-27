@@ -1,6 +1,6 @@
 {
   "name": "iohook2",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Nodejs bindings for libuiohook",
   "main": "index.js",
   "scripts": {

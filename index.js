@@ -3,6 +3,7 @@
 const kCodes = {65288:"backspace", 65289:"tab", 65293:"enter", 65505:"leftShift", 65506:"rightShift", 65507:"leftCtrl", 65508:"rightCtrl", 65509:"capsLock", 65513:"leftAlt", 65514:"rightAlt", 65515:"leftMeta", 65516:"rightMeta", 65300:"mediaPlay", 65301:"mediaStop", 65302:"mediaBack", 65303:"mediaNext", 65307:"esc", 65282:"brightUp", 65283:"brightDown", 65299:"pauseBreak", 65361:"left", 65362:"up", 65363:"right", 65364:"down", 65365:"pageUp", 65366:"pageDown", 65379:"insert", 65535:"delete", 65360:"home", 65367:"end", 65377:"printScr", 65407:"numLock", 65470:"f1", 65471:"f2", 65472:"f3", 65473:"f4", 65474:"f5", 65475:"f6", 65476:"f7", 65477:"f8", 65478:"f9", 65479:"f10", 65480:"f11", 65481:"f12"};
 //Todo Test: Media buttons, numLock
 //Todo: Number Pad, ??:"scrollLock", ??:"menu"
+//Todo: Write documentation on the key code names
 
 class IOCallback {
 	constructor() { this._cb={}; }
