@@ -1,6 +1,4 @@
-const NodeHookAddon = require("bindings")("node-iohook");
-
-NodeHookAddon.start_hook(function(event)
-{
-	console.log(event)
-})
+const io=require('.'); io.on('event', e => {
+	let ev=e.event; if(process.argv[2] || (ev!='keypress' && ev!='mousemove'
+	&& ev!='mousedrag' && ev!='mousewheel')) console.log(e);
+}); io.start();

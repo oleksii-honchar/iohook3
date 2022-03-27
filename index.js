@@ -1,140 +1,50 @@
-'use strict'
+'use strict'; const IOHook=require('bindings')('iohook');
 
-const NodeHookAddon = require("bindings")("node-iohook");
-const EventEmitter = require('events');
+const kCodes = {65288:"backspace", 65289:"tab", 65293:"enter", 65505:"leftShift", 65506:"rightShift", 65507:"leftCtrl", 65508:"rightCtrl", 65513:"leftAlt", 65514:"rightAlt", 65515:"leftMeta", 65516:"rightMeta", 65300:"mediaPlay", 65301:"mediaStop", 65302:"mediaBack", 65303:"mediaNext", 65307:"esc", 65282:"brightUp", 65283:"brightDown", 65361:"left", 65362:"up", 65363:"right", 65364:"down", 65365:"pageUp", 65366:"pageDown", 65379:"insert", 65335:"delete", 65360:"home", 65367:"end", 65377:"printScr", 65407:"numLock", 65470:"f1", 65471:"f2", 65472:"f3", 65473:"f4", 65474:"f5", 65475:"f6", 65476:"f7", 65477:"f8", 65478:"f9", 65479:"f10", 65480:"f11", 65481:"f12"};
+//Todo Test: Media buttons, numLock
+//Todo: Number Pad, ??:"scrollLock", ??:"menu"
 
-class IOCallback{
-
-	constructor()
-	{
-		this._cbObject = {};
-		this.active = false;
-	}
-	add(event,cb)
-	{
-		this._cbObject[event]=cb;
-	}
-	getCB(cb){
-		let that = this;
-		return function(msg){
-			
-			if(that.active==false) return;
-			if(msg==undefined) {console.log(msg); return;}
-			if(msg.type==3)
-			{
-				if(that._cbObject["keypress"])
-				{
-					that._cbObject["keypress"](msg);
-				}
-
+class IOCallback {
+	constructor() { this._cb={}; }
+	set(event,cb) { this._cb[event]=cb; }
+	getCB() {
+		return d => {
+			if(!this.active) return; if(d==null) return console.log(d);
+			let m=d.mask,e=d.mouse||d.wheel||{},n;
+			switch(d.type) {
+				case 0: n="key0"; break; case 1: n="key1"; break; case 2: n="key2"; break; case 4: n="key4"; break;
+				case 3: n="keydown"; break;
+				case 5: n="keyup"; break; case 6: n="mouseclick"; break;
+				case 7: n="mousedown"; break; case 8: n="mouseup"; break;
+				case 9: n="mousemove"; break; case 10: n="mousedrag"; break;
+				case 11: n="mousewheel";
 			}
-			else if(msg.type==4)
-			{
-				if(that._cbObject["keydown"])
-				{
-					that._cbObject["keydown"](msg);
-				}
-
+			if(d.kb) {
+				e.code=d.kb.rawcode;
+				e.key=e.code<200?String.fromCharCode(e.code).toLowerCase():kCodes[e.code];
+				e.leftShift=!!(m&1), e.rightShift=!!(m&16), e.shift=(m&1)||(m&16);
+				e.leftCtrl=!!(m&2), e.rightCtrl=!!(m&32), e.ctrl=(m&2)||(m&32);
+				e.leftMeta=!!(m&4), e.rightMeta=!!(m&64), e.meta=(m&4)||(m&64);
+				e.leftAlt=!!(m&8), e.rightAlt=!!(m&128), e.alt=(m&8)||(m&128);
+				e.capsLock=!!(m&16384);
 			}
-			else if(msg.type==5)
-			{
-				if(that._cbObject["keyup"])
-				{
-					that._cbObject["keyup"](msg);
-				}
-
-			}
-			else if(msg.type==6)
-			{
-				if(that._cbObject["mouseclick"])
-				{
-					that._cbObject["mouseclick"](msg);
-				}
-
-			}
-			else if(msg.type==7)
-			{
-				if(that._cbObject["mousedown"])
-				{
-					that._cbObject["mousedown"](msg);
-				}
-
-			}
-			else if(msg.type==8)
-			{
-				
-				if(that._cbObject["mouseup"])
-				{
-					that._cbObject["mouseup"](msg);	
-				}	
-			}
-			else if (msg.type == 9)
-			{
-				if(that._cbObject["mousemove"])
-				{
-					that._cbObject["mousemove"](msg);	
-				}	
-			}
-			else if (msg.type == 10)
-			{
-				if(that._cbObject["mousedrag"])
-				{
-					that._cbObject["mousedrag"](msg);	
-				}	
-			}
-			else if( msg.type == 11)
-			{
-				if(that._cbObject["mousewheel"])
-				{
-					that._cbObject["mousewheel"](msg);	
-				}
-			}
+			e.event=n; if(this._cb[n]) this._cb[n](e);
+			if(this._cb.event) this._cb.event(e);
 		}
 	}
-
-
-
 }
 
-class IOHook {
-
-	constructor(){
-		this.eventEmitter = new EventEmitter();
-		this.callback = new IOCallback();
-		this.status = "stoped"
-	}
-	
-
-	on(event,callback)
-	{
-		this.callback.add(event,callback);
-		
-	}	
-
-	start(callback){
-		if(this.status == "stoped")
-		{
-			NodeHookAddon.start_hook(this.callback.getCB(callback))
-			this.status = "started"	
-			this.callback.active = true;
+class Hook {
+	constructor() { this.cb=new IOCallback(); }
+	on(e,cb) { this.cb.set(e,cb); }
+	start() {
+		if(!this.status) {
+			IOHook.start_hook(this.cb.getCB());
+			this.status=1, this.cb.active=1;
 		}
-		
 	}
-
-	pause()
-	{
-		this.callback.active = false;
-	}
-
-	resume()
-	{
-		this.callback.active = true;
-	}
-
-	stop(){
-		NodeHookAddon.stop_hook();
-	}
-
+	pause() { this.cb.active=0; }
+	resume() { this.cb.active=1; }
+	stop() { IOHook.stop_hook(); this.status=0; }
 }
-
-module.exports = IOHook;
+module.exports=new Hook();
