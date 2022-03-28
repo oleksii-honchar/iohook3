@@ -8,7 +8,7 @@ const kCodes = {65288:"backspace", 65289:"tab", 65293:"enter", 65505:"leftShift"
 class IOCallback {
 	constructor() { this._cb={}; }
 	set(event,cb) { this._cb[event]=cb; }
-	getCB() {
+	get() {
 		return d => {
 			if(!this.active) return; if(d==null) return console.log(d);
 			let m=d.mask,e=d.mouse||d.wheel||{},n;
@@ -20,7 +20,7 @@ class IOCallback {
 				case 9: n="mousemove"; break; case 10: n="mousedrag"; break;
 				case 11: n="mousewheel";
 			}
-			if(d.kb) {
+			e.event=n; if(d.kb) {
 				e.code=d.kb.rawcode;
 				e.key=e.code<200?String.fromCharCode(e.code).toLowerCase():kCodes[e.code];
 				e.leftShift=!!(m&1), e.rightShift=!!(m&16), e.shift=((m&1)||(m&16));
@@ -29,18 +29,21 @@ class IOCallback {
 				e.leftAlt=!!(m&8), e.rightAlt=!!(m&128), e.alt=!!((m&8)||(m&128));
 				e.capsLock=!!(m&16384);
 			}
-			e.event=n; if(this._cb[n]) this._cb[n](e);
-			if(this._cb.event) this._cb.event(e);
+			try { if(this._cb[n]) this._cb[n](e); if(this._cb.event) this._cb.event(e); }
+			catch(e) {console.log(e)}
 		}
 	}
 }
 
 class Hook {
-	constructor() { this.cb=new IOCallback(); }
+	constructor() {
+		this.cb=new IOCallback();
+		process.on('exit', this.stop);
+	}
 	on(e,cb) { this.cb.set(e,cb); }
 	start() {
 		if(!this.status) {
-			IOHook.start_hook(this.cb.getCB());
+			IOHook.start_hook(this.cb.get());
 			this.status=1, this.cb.active=1;
 		}
 	}
