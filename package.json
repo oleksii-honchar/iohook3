@@ -19,6 +19,15 @@
   "license": "GPL-3.0",
   "author": "oleksii-honchar",
   "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "build.js",
+    "binding.gyp",
+    "src",
+    "build/Release/iohook.node"
+  ],
   "scripts": {
     "clean": "rm -rf dist && rm -rf node_modules",
     "clean:dist": "rm -rf dist",
