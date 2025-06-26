@@ -1,31 +1,42 @@
 {
-  "name": "iohook2",
-  "version": "1.0.6",
+  "name": "iohook3",
+  "version": "0.0.0",
   "description": "Nodejs bindings for libuiohook",
-  "main": "index.js",
-  "scripts": {
-    "test": "node test.js",
-    "preinstall": "node build.js",
-	"install": "node-gyp rebuild"
-  },
   "keywords": [
     "uiohook",
-	"iohook",
+    "iohook",
     "hook",
-	"global",
-	"event",
+    "global",
+    "event",
     "keyboard",
-	"capture",
-    "hook",
+    "capture",
     "mouse"
   ],
-  "author": "Pecacheu",
-  "license": "GPL-3.0",
-  "dependencies": {
-    "bindings": "^1.2.1",
-    "nan": "^2.4.0"
+  "homepage": "https://github.com/oleksii-honchar/iohook3#readme",
+  "bugs": {
+    "url": "https://github.com/oleksii-honchar/iohook3/issues"
   },
-  "gypfile": true,
-  "bugs": {"url": "https://github.com/Pecacheu/node-iohook/issues"},
-  "homepage": "https://github.com/Pecacheu/node-iohook#readme"
+  "license": "GPL-3.0",
+  "author": "oleksii-honchar",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf node_modules",
+    "clean:dist": "rm -rf dist",
+    "preinstall": "node build.js",
+    "install": "node-gyp rebuild",
+    "prepare": "husky",
+    "sort-package-json": "npx sort-package-json",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "nan": "^2.22.2",
+    "prettier": "^3.6.1",
+    "prettier-plugin-organize-imports": "^4.1.0"
+  },
+  "packageManager": "pnpm@10.12.4",
+  "engines": {
+    "node": "^24"
+  },
+  "gypfile": true
 }

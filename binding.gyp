@@ -1,12 +1,28 @@
-{"targets": [{
-	"target_name": "iohook",
-	"sources": ["src/iohook.cc"],
-	"include_dirs": ["../nan", "node_modules/nan", "libuiohook/dist/include"],
-	"conditions": [
-		['OS=="win"', { #Windows
-			"libraries": ["../libuiohook/dist/lib/uiohook"]
-		}, { #Not Windows
-			"libraries": ["-luiohook", "-L../libuiohook/dist/lib", "-lxkbfile", "-lxkbcommon-x11", "-lxkbcommon", "-lX11-xcb", "-lxcb", "-lXinerama", "-lXt", "-lXtst", "-lX11"]
-		}]
+{
+	"targets": [
+		{
+			"target_name": "iohook",
+			"sources": [
+				"src/iohook.cc"
+			],
+			"include_dirs": [
+				"<!(node -e \"require('nan')\")",
+				"libuiohook/dist/include"
+			],
+			"link_settings": {
+				"libraries": [
+					"-framework Carbon",
+					"-framework CoreFoundation",
+					"<(module_root_dir)/libuiohook/dist/lib/libuiohook.a"
+				]
+			},
+			"xcode_settings": {
+				"GCC_ENABLE_CPP_EXCEPTIONS": "YES",
+				"OTHER_CPLUSPLUSFLAGS": [
+					"-std=c++20",
+					"-stdlib=libc++"
+				]
+			}
+		}
 	]
-}]}
+}

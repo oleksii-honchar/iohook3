@@ -1,7 +1,7 @@
-# iohook2
+# iohook3
 Nodejs bindings for libuiohook, and a replacement/renewal to the abandoned iohook library (and at least 5 other alternatives that have also been abandoned!)
 
-Install with `npm install iohook2`
+Install with `npm install iohook3`
 
 # About
 This package allows your nodejs program to read keyboard and mouse events on a global scope, even if the user isn't focused in the console window!
@@ -19,7 +19,7 @@ This package allows your nodejs program to read keyboard and mouse events on a g
 
 ## Example
 ```
-const io = require('iohook2');
+const io = require('iohook3');
 
 io.on('keydown', e => {
     console.log(e.key+" pressed!");
@@ -45,7 +45,7 @@ Please install [cmake](https://cmake.org/download). Any required DLLs should be 
 *Note: Windows support is WIP. Code compiles with no errors but then has a strange linker issue.*
 
 ### Mac
-*Macs cost money and (for personal reasons I won't get into, not to mention the right-to-repair stuff) Apple isn't getting any more of mine. But if you have one please do help out getting it to work! Shouldn't be too different from Linux, just different dependencies.*
+TBD
 
 ## Detailed Usage
 All key events provide a `key` property with the key name as a String, as well as a `code` property with the raw keycode. The recognized special keys are as follows:
